@@ -97,8 +97,10 @@ function WalletTransactions() {
             ...allTransactions.map((transaction, index) => [
                 index + 1,
                 transaction._id,
+                transaction.description,
                 transaction.amount,
                 transaction.balance,
+                transaction.type,
                 transaction.date,
             ])
         ];
@@ -158,8 +160,10 @@ function WalletTransactions() {
                                     <tr key={transaction._id}>
                                         <td>{skip + index + 1}</td>
                                         <td>{transaction._id}</td>
+                                        <td>{transaction.description}</td>
                                         <td>{transaction.amount}</td>
                                         <td>{transaction.balance}</td>
+                                        <td>{transaction.type}</td>
                                         <td>{transaction.date}</td>
                                     </tr>
                                 ))}
