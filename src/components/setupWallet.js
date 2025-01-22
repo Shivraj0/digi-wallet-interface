@@ -69,7 +69,7 @@ function SetupWallet() {
                             type="number"
                             placeholder='Enter balance'
                             value={balance}
-                            onChange={(e) => setBalance(e.target.value)}
+                            onChange={(e) => setBalance(parseFloat(e.target.value))}
                             min={0} // Negative balance not allowed
                         ></input>
                     </div>
