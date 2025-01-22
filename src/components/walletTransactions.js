@@ -95,7 +95,7 @@ function WalletTransactions() {
     return (
         <div className='transactions-wrapper'>
             <h1>Transactions</h1>
-            {transactions.length === 0
+            {transactions.length === 0 && skip === 0
                 ?   <div>
                         <p>No transactions found !</p>
                         <Link to="/">Setup Wallet</Link>
