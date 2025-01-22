@@ -47,6 +47,7 @@ function UpdateWallet({walletData}) {
                         placeholder='Enter Deposit Amount'
                         value={amount}
                         onChange={(e) => setAmount(parseFloat(e.target.value))}
+                        step={.0001}
                         min={0}
                     />
                     <div>
