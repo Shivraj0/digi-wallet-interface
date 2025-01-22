@@ -2,15 +2,14 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { downloadFile } from '../utils/download.utils';
 import '../styles/walletTransactions.css';
-import { config } from '../config';
-import { Link } from 'react-router-dom';
+
+const { LIMIT, FILENAME } = constants;
+const ENDPOINT_URL = config.walletTransactionsUrl();
 
 function WalletTransactions() {
     const [transactions, setTransactions] = useState([]);
     const [sort, setSort] = useState('date');
     const [skip, setSkip] = useState(0);
-    const LIMIT = 10;
-    const ENDPOINT_URL = config.walletTransactionsUrl();
 
     useEffect(() => {
 
@@ -89,7 +88,7 @@ function WalletTransactions() {
         ];
 
         const csvContent = csvRows.map(row => row.join(',')).join('\n');
-        downloadFile(csvContent, 'transactions.csv');
+        downloadFile(csvContent, FILENAME);
     }
 
     return (
