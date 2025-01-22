@@ -54,6 +54,9 @@ function UpdateWallet({walletData}) {
                         <input type="checkbox" id="type" value={credit} onChange={() => { setCredit(!credit)} } />
                         <label htmlFor="type">DEBIT (Default: CREDIT)</label>
                     </div>
+
+                    {/* [Comment]: Description in POST /transact payload is optional hence not include here as an input */}
+
                     <button>Deposit</button>
                 </form>
                 <div className='wallet-data__item'>
