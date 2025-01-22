@@ -21,7 +21,5 @@
     ```
 
 ## Usage
-To start the application, run:
-```bash
-npm start
-```
+```sh
+chmod +x run.local.sh && ./run.local.sh
