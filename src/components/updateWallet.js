@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import '../styles/transactWallet.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import '../styles/updateWallet.css';
 
 function UpdateWallet({walletData}) {
     const [amount, setAmount] = useState(0);

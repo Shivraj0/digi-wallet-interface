@@ -1,0 +1,61 @@
+h1 {
+    font-size: 24px;
+    color: #fff;
+    margin: 0;
+    padding: 8px 16px;
+}
+
+.transactions-table {
+    color: #fff;
+    width: 100%;
+    height: 300px;
+}
+
+.transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 16px;
+    
+    button {
+        width: fit-content;
+    }
+}
+
+.transaction-filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 20px;
+
+    label {
+        font-size: 16px;
+        margin-left: 4px;
+    }
+
+    input {
+        margin-left: 8px;
+    }
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+        padding: 8px 12px;
+        width: fit-content;
+        border-radius: 4px;
+    }
+
+    span {
+        color: #fff;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+        
+}
