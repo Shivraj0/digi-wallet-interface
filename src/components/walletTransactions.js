@@ -58,8 +58,9 @@ function WalletTransactions() {
             if(walletId) {
                 let response = await axios.get(ENDPOINT_URL, { params: { walletId, skip } });
                 
-                // until response is empty pull all transactions since at the backend
-                // we are limiting the no. of response to 10
+                // until response is empty fetch all transactions,
+                // since at the backend we are limiting the no. of
+                // transactions per response to 10
                 while(response.data.length) {
                     allTransactions = allTransactions.concat(response.data);
                     skip += LIMIT;
@@ -70,6 +71,7 @@ function WalletTransactions() {
             return allTransactions;
         } catch (error) {
             window.alert('Error fetching all transactions !');
+            console.error('Error fetching all transactions:', error);
         }
     }
 
@@ -94,6 +96,9 @@ function WalletTransactions() {
     return (
         <div className='transactions-wrapper'>
             <h1>Transactions</h1>
+            {/* { below skip = 0 check added to check if
+                first set of transactions data is null in that
+                case `walletId` is null  } */}
             {transactions.length === 0 && skip === 0
                 ?   <div>
                         <p>No transactions found !</p>
