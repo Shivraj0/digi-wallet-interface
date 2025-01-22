@@ -23,6 +23,7 @@
 ## Usage
 ```sh
 chmod +x run.local.sh && ./run.local.sh
+```
 
 ### Repository tips
 - Global search `[Comment]` to find implemention comments.
