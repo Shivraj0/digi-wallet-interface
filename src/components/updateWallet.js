@@ -2,11 +2,13 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../styles/updateWallet.css';
+import { config } from '../config';
 
 function UpdateWallet({walletData}) {
     const [amount, setAmount] = useState(0);
     const [credit, setCredit] = useState(true);
     const [balance, updateBalance] = useState(walletData.balance);
+    const ENDPOINT_URL = config.updateWalletUrl(walletData._id);
 
     async function depositAmount() {
         try {
@@ -18,7 +20,7 @@ function UpdateWallet({walletData}) {
                 amount: credit ? amount : -amount,
             };
 
-            const transactWallet = await axios.post(`http://localhost:3000/transact/${walletData._id}`, depositPayload);
+            const transactWallet = await axios.post(ENDPOINT_URL, depositPayload);
             updateBalance(transactWallet.data.balance);
         } catch (error) {
             window.alert(error?.response?.data?.message);

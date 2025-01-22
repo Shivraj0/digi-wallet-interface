@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { downloadFile } from '../utils/download.utils';
 import '../styles/walletTransactions.css';
+import { config } from '../config';
+import { Link } from 'react-router-dom';
 
 function WalletTransactions() {
     const [transactions, setTransactions] = useState([]);
     const [sort, setSort] = useState('date');
     const [skip, setSkip] = useState(0);
     const LIMIT = 10;
+    const ENDPOINT_URL = config.walletTransactionsUrl();
 
     useEffect(() => {
 
@@ -15,10 +18,16 @@ function WalletTransactions() {
             try {
                 let walletId = localStorage.getItem('walletId');
                 if(walletId) {
-                    const query = sort === 'date' ? `date=1` : `amount=1`;
-                    const walletTransactions = await axios.get(`http://localhost:3000/transactions?walletId=${walletId}&skip=${skip}&${query}`);
+                    const query = {
+                        walletId,
+                        skip
+                    }
+
+                    if(sort === 'date') query.date = 1;
+                    else query.amount = 1;
+
+                    const walletTransactions = await axios.get(ENDPOINT_URL, { params: query });
                     setTransactions(walletTransactions.data);
-                    console.log('transactions', transactions);
                 }
             } catch (error) {
                 window.alert('Error fetching wallet data !');
@@ -46,12 +55,17 @@ function WalletTransactions() {
             let allTransactions = [];
             let skip = 0;
             const walletId = localStorage.getItem('walletId');
-            let response = await axios.get(`http://localhost:3000/transactions?walletId=${walletId}&skip=${skip}&limit=${LIMIT}`);
-            
-            while(response.data.length) {
-                allTransactions = allTransactions.concat(response.data);
-                skip += LIMIT;
-                response = await axios.get(`http://localhost:3000/transactions?walletId=${walletId}&skip=${skip}&limit=${LIMIT}`);
+
+            if(walletId) {
+                let response = await axios.get(ENDPOINT_URL, { params: { walletId, skip } });
+                
+                // until response is empty pull all transactions since at the backend
+                // we are limiting the no. of response to 10
+                while(response.data.length) {
+                    allTransactions = allTransactions.concat(response.data);
+                    skip += LIMIT;
+                    response = await axios.get(ENDPOINT_URL, { params: { walletId, skip } });
+                }
             }
 
             return allTransactions;
@@ -79,63 +93,71 @@ function WalletTransactions() {
     }
 
     return (
-        <div>
+        <div className='transactions-wrapper'>
             <h1>Transactions</h1>
-            <div className='transactions-header'>
-                <div className='transaction-filters'>
-                    Sort by:
-                    <input 
-                        type="radio" 
-                        id="date" 
-                        name="sort" 
-                        value="date" 
-                        checked={sort === 'date'} 
-                        onChange={(e) => setSort(e.target.value)} 
-                    />
-                    <label htmlFor="date">Date</label>
-                    <input 
-                        type="radio" 
-                        id="amount" 
-                        name="sort" 
-                        value="amount" 
-                        checked={sort === 'amount'} 
-                        onChange={(e) => setSort(e.target.value)} 
-                    />
-                    <label htmlFor="amount">Amount</label>
-                </div>
-                <button onClick={downloadCSV}>Download CSV</button>
-            </div>
-            <table className="transactions-table">
-                <thead>
-                    <tr>
-                        <th>Sr No.</th>
-                        <th>Transaction ID</th>
-                        <th>Amount</th>
-                        <th>Balance</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {transactions.map((transaction, index) => (
-                        <tr key={transaction._id}>
-                            <td>{skip + index + 1}</td>
-                            <td>{transaction._id}</td>
-                            <td>{transaction.amount}</td>
-                            <td>{transaction.balance}</td>
-                            <td>{transaction.date}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <div className="pagination">
-                <button onClick={handlePrevious} disabled={skip === 0}>
-                    Prev
-                </button>
-                <span>Page {skip/10 + 1}</span>
-                <button onClick={handleNext} disabled={transactions.length < 10}>
-                    Next
-                </button>
-            </div>
+            {transactions.length === 0
+                ?   <div>
+                        <p>No transactions found !</p>
+                        <Link to="/">Setup Wallet</Link>
+                    </div>
+                :   <div>
+                        <div className='transactions-header'>
+                    <div className='transaction-filters'>
+                        Sort by:
+                        <input 
+                            type="radio" 
+                            id="date" 
+                            name="sort" 
+                            value="date" 
+                            checked={sort === 'date'} 
+                            onChange={(e) => setSort(e.target.value)} 
+                        />
+                        <label htmlFor="date">Date</label>
+                        <input 
+                            type="radio" 
+                            id="amount" 
+                            name="sort" 
+                            value="amount" 
+                            checked={sort === 'amount'} 
+                            onChange={(e) => setSort(e.target.value)} 
+                        />
+                        <label htmlFor="amount">Amount</label>
+                    </div>
+                    <button onClick={downloadCSV}>Download CSV</button>
+                        </div>
+                        <table className="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr No.</th>
+                                    <th>Transaction ID</th>
+                                    <th>Amount</th>
+                                    <th>Balance</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {transactions.map((transaction, index) => (
+                                    <tr key={transaction._id}>
+                                        <td>{skip + index + 1}</td>
+                                        <td>{transaction._id}</td>
+                                        <td>{transaction.amount}</td>
+                                        <td>{transaction.balance}</td>
+                                        <td>{transaction.date}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <div className="pagination">
+                            <button onClick={handlePrevious} disabled={skip === 0}>
+                                Prev
+                            </button>
+                            <span>Page {skip/10 + 1}</span>
+                            <button onClick={handleNext} disabled={transactions.length < 10}>
+                                Next
+                            </button>
+                        </div>
+                    </div>
+            }
         </div>
     )
 }

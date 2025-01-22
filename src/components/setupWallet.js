@@ -2,18 +2,22 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import UpdateWallet from './updateWallet';
 import '../styles/setupWallet.css';
+import { config } from '../config';
 
 function SetupWallet() {
     const [name, setName] = useState('');
     const [balance, setBalance] = useState(0);
     const [walletData, setWalletData] = useState(null);
+    
+    let walletId = localStorage.getItem('walletId');
+    const SETUP_WALLET_URL = config.setupWalletUrl();
+    const WALLET_DETAILS_URL = config.walletDetailsUrl(walletId);
 
     useEffect(() => {
         async function fetchData() {
             try {
-                let walletId = localStorage.getItem('walletId');
                 if(walletId) {
-                    const walletDetails = await axios.get(`http://localhost:3000/wallet/${walletId}`);
+                    const walletDetails = await axios.get(WALLET_DETAILS_URL);
                     setWalletData(walletDetails.data);
                 }
             } catch (error) {
@@ -33,8 +37,7 @@ function SetupWallet() {
                 balance,
             };
     
-            const newWallet = await axios.post('http://localhost:3000/setup', wallet);
-            window.alert('Wallet successfully created !');
+            const newWallet = await axios.post(SETUP_WALLET_URL, wallet);
             localStorage.setItem('walletId', newWallet.data._id);
             setWalletData(newWallet.data);
         } catch (error) {
