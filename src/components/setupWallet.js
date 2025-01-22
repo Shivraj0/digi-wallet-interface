@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import UpdateWallet from './updateWallet';
-import '../styles/setupWallet.css';
 import { config } from '../config';
+import '../styles/setupWallet.css';
 
 function SetupWallet() {
     const [name, setName] = useState('');
