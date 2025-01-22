@@ -13,14 +13,15 @@ function WalletTransactions() {
     const [transactions, setTransactions] = useState([]);
     const [sort, setSort] = useState('date');
     const [skip, setSkip] = useState(0);
-    const isMounted = useRef(true);
+    const isMounted = useRef({});
 
     useEffect(() => {
+        if (!isMounted.current) return;
 
         async function fetchData() {
             try {
                 let walletId = localStorage.getItem('walletId');
-                if(walletId && isMounted.current) {
+                if(walletId) {
                     const query = {
                         walletId,
                         skip
@@ -40,10 +41,15 @@ function WalletTransactions() {
 
         fetchData();
 
+    }, [sort, skip]);
+
+    // This is implemented to avoid hook execution multiple times on mount
+    useEffect(() => {
+        isMounted.current = true;
         return () => {
             isMounted.current = false;
         };
-    }, [sort, skip]);
+    }, []);
     
     function handlePrevious() {
         if(skip > 0) {
