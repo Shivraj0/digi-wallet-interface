@@ -95,7 +95,7 @@ function WalletTransactions() {
         const csvRows = [
             ['Sr No.', 'ID', 'Amount', 'Balance', 'Date'],
             ...allTransactions.map((transaction, index) => [
-                skip + index + 1,
+                index + 1,
                 transaction._id,
                 transaction.amount,
                 transaction.balance,
