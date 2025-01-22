@@ -22,6 +22,10 @@ function UpdateWallet({walletData}) {
 
             const transactWallet = await axios.post(ENDPOINT_URL, depositPayload);
             updateBalance(transactWallet.data.balance);
+            
+            // Reset input states back to default values once transaction is complete
+            setAmount(0);
+            setCredit(false)
         } catch (error) {
             window.alert(error?.response?.data?.message);
             console.error('Error depositing amount:', error);
