@@ -1,15 +1,15 @@
 import './App.css';
-import Wallet from './components/wallet';
+import SetupWallet from './components/setupWallet';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ListTransactions from './components/listTransactions';
+import WalletTransactions from './components/walletTransactions';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Wallet />} />
-          <Route path="/transactions" element={<ListTransactions />} />
+          <Route path="/" element={<SetupWallet />} />
+          <Route path="/transactions" element={<WalletTransactions />} />
         </Routes>
       </div>
     </Router>

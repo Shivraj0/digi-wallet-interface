@@ -1,4 +1,4 @@
-function ListTransactions() {
+function WalletTransactions() {
     return (
         <div>
             <h1>List Transactions</h1>
@@ -6,4 +6,4 @@ function ListTransactions() {
     )
 }
 
-export default ListTransactions;
+export default WalletTransactions;

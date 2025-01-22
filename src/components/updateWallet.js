@@ -3,7 +3,7 @@ import '../styles/transactWallet.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-function TransactWallet({walletData}) {
+function UpdateWallet({walletData}) {
     const [amount, setAmount] = useState(0);
     const [credit, setCredit] = useState(true);
     const [balance, updateBalance] = useState(walletData.balance);
@@ -57,4 +57,4 @@ function TransactWallet({walletData}) {
         </div>
     )
 }
-export default TransactWallet;
+export default UpdateWallet;

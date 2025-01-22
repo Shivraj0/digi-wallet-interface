@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import '../styles/wallet.css';
 import axios from 'axios';
-import TransactWallet from './transactWallet';
+import UpdateWallet from './updateWallet';
 
-function Wallet() {
+function SetupWallet() {
     const [name, setName] = useState('');
     const [balance, setBalance] = useState(0);
     const [walletData, setWalletData] = useState(null);
@@ -46,7 +46,7 @@ function Wallet() {
     return (
         <div className='wallet-form-wrapper'>
             {walletData ? (
-                <TransactWallet walletData={walletData} />
+                <UpdateWallet walletData={walletData} />
             ) : (
                 <form className='wallet-form' onSubmit={e => { e.preventDefault(); createWallet(); }}>
                     <h1>Create Wallet</h1>
@@ -71,4 +71,4 @@ function Wallet() {
         </div>
     )
 }
-export default Wallet;
+export default SetupWallet;
