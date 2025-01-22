@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { downloadFile } from '../utils/download.utils';
@@ -13,13 +13,14 @@ function WalletTransactions() {
     const [transactions, setTransactions] = useState([]);
     const [sort, setSort] = useState('date');
     const [skip, setSkip] = useState(0);
+    const isMounted = useRef(true);
 
     useEffect(() => {
 
         async function fetchData() {
             try {
                 let walletId = localStorage.getItem('walletId');
-                if(walletId) {
+                if(walletId && isMounted.current) {
                     const query = {
                         walletId,
                         skip
@@ -38,6 +39,10 @@ function WalletTransactions() {
         }
 
         fetchData();
+
+        return () => {
+            isMounted.current = false;
+        };
     }, [sort, skip]);
     
     function handlePrevious() {

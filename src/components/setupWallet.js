@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import UpdateWallet from './updateWallet';
 import { config } from '../config';
@@ -8,6 +8,7 @@ function SetupWallet() {
     const [name, setName] = useState('');
     const [balance, setBalance] = useState(0);
     const [walletData, setWalletData] = useState(null);
+    const isMounted = useRef(true);
     
     let walletId = localStorage.getItem('walletId');
     const SETUP_WALLET_URL = config.setupWalletUrl();
@@ -16,7 +17,7 @@ function SetupWallet() {
     useEffect(() => {
         async function fetchData() {
             try {
-                if(walletId) {
+                if(walletId && isMounted.current) {
                     const walletDetails = await axios.get(WALLET_DETAILS_URL);
                     setWalletData(walletDetails.data);
                 }
@@ -27,7 +28,11 @@ function SetupWallet() {
         }
 
         fetchData();
-    }, []);
+
+        return () => {
+            isMounted.current = false;
+        };
+    }, [walletId]); // walletId will not change here, but added for completeness
 
 
     async function createWallet() {
