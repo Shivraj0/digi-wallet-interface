@@ -6,7 +6,7 @@ import { config } from '../config';
 import { constants } from '../constants';
 import '../styles/walletTransactions.css';
 
-const { LIMIT, FILENAME } = constants;
+const { LIMIT, FILENAME, TRANSACTION_COLUMNS } = constants;
 const ENDPOINT_URL = config.walletTransactionsUrl();
 
 function WalletTransactions() {
@@ -93,7 +93,7 @@ function WalletTransactions() {
         const allTransactions = await fetchAllTransactions();
         
         const csvRows = [
-            ['Sr No.', 'ID', 'Amount', 'Balance', 'Date'],
+            [...TRANSACTION_COLUMNS],
             ...allTransactions.map((transaction, index) => [
                 index + 1,
                 transaction._id,
@@ -148,11 +148,9 @@ function WalletTransactions() {
                         <table className="transactions-table">
                             <thead>
                                 <tr>
-                                    <th>Sr No.</th>
-                                    <th>Transaction ID</th>
-                                    <th>Amount</th>
-                                    <th>Balance</th>
-                                    <th>Date</th>
+                                    {TRANSACTION_COLUMNS.map((column, index) => (
+                                        <th key={index}>{column}</th>
+                                    ))}
                                 </tr>
                             </thead>
                             <tbody>
